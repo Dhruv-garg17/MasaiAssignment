@@ -20,7 +20,7 @@ const checkout = {
   }
 };
 
-// Test cases
+
 checkout.addItem({ name: "Coffee Maker", price: "99.95" });
 checkout.addItem({ name: "Milk", price: 3.50 }); 
 checkout.addItem({ name: "Bag", price: "abc" }); 
