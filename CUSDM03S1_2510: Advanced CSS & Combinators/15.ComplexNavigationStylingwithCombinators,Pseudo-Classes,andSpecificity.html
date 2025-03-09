@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Navbar</title>
+    <style>
+  
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background: #333;
+            padding: 15px;
+        }
+
+        .nav-section {
+            list-style: none;
+        }
+
+        .nav-section a {
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+
+        .nav-section.section1 a {
+            color: lightblue;
+        }
+
+        .nav-section.section2 a {
+            color: lightgreen;
+        }
+
+        .nav-section.section3 a {
+            color: lightsalmon;
+        }
+
+        .nav-section > a {
+            font-weight: bold;
+        }
+
+        .nav-section a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+
+        .nav-section a:active {
+            background: #555;
+            color: white;
+        }
+
+   
+        .nav-section a[href^="https"] {
+            color: gold !important;
+            font-weight: bold;
+        }
+
+     
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <!-- Section 1 -->
+        <ul class="nav-section section1">
+            <a href="#">Home</a>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+        </ul>
+
+        
+        <ul class="nav-section section2">
+            <a href="#">Products</a>
+            <li><a href="#">Electronics</a></li>
+            <li><a href="#">Clothing</a></li>
+            <li><a href="https://external.com">External Link</a></li>
+        </ul>
+
+      
+        <ul class="nav-section section3">
+            <a href="#">Contact</a>
+            <li><a href="#">Email</a></li>
+            <li><a href="#">Support</a></li>
+        </ul>
+    </nav>
+
+</body>
+</html>
