@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Image Gallery</h1>
+    
+    <div class="gallery">
+        <section>
+            <img src="https://www.onegreenplanet.org/wp-content/uploads/2023/07/shutterstock_1922148296-scaled.jpg" alt="Beautiful Landscape">
+            <p><a href="https://en.wikipedia.org/wiki/Animal" target="_blank">Learn more about Animals</a></p>
+        </section>
+
+        <section>
+            <img src="https://cf-img-a-in.tosshub.com/sites/visualstory/wp/2023/11/Chandrayaan-isro4.png?size=*:900" alt="Space Exploration">
+            <p><a href="https://en.wikipedia.org/wiki/Chandrayaan_programme" target="_blank">Explore Chandrayaan</a></p>
+        </section>
+
+        <section>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Grey_Aliens_Drawing.jpg/640px-Grey_Aliens_Drawing.jpg" alt="Wildlife Photography">
+            <p><a href="https://en.wikipedia.org/wiki/Alien" target="_blank">Discover Aliens</a></p>
+        </section>
+    </div>
+
+</body>
+</html>
