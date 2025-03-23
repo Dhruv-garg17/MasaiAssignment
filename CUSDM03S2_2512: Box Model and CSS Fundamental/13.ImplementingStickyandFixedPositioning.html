@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Header & Fixed Footer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            z-index: 1000;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+        .content {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .content p {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Sticky Header</div>
+    <div class="content">
+        <p>The animal kingdom is divided into five infrakingdoms/superphyla, namely Porifera, Ctenophora, Placozoa, Cnidaria and Bilateria.</p>
+        <p>The much smaller basal phylum Xenacoelomorpha have an uncertain position within Bilateria.</p>
+        <p>The scientific study of animals is known as zoology, and the study of animal behaviour is known as ethology.</p>
+        <p>Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft).</p>
+        <p>A food web is the natural interconnection of food chains and a graphical representation of what-eats-what in an ecological community.</p>
+        <p>The food web is a simplified illustration of the various methods of feeding that link an ecosystem into a unified system of exchange.</p>
+        <p>Consumer-resource interactions are the core motif of ecological food chains or food webs</p>
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+        <p>Another way of categorizing consumers, proposed by South African American ecologist Wayne Getz</p>
+        <p>In Getz's scheme, words for miners are of Greek etymology and words for gatherers are of Latin etymology.</p>
+    </div>
+    <div class="footer">Fixed Footer</div>
+</body>
+</html>
