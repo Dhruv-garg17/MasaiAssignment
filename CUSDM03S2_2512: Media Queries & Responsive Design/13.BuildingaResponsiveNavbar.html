@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Navbar</title>
+  <style>
+   
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #333;
+      padding: 10px 20px;
+      color: white;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar .menu {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar .menu-item {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1023px) and (min-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .menu {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    
+    @media (max-width: 767px) {
+      .menu {
+        display: none; 
+        flex-direction: column;
+        gap: 10px;
+        background-color: #444;
+        width: 100%;
+        padding: 10px 0;
+        position: absolute;
+        top: 50px;
+        left: 0;
+      }
+
+      .menu.show {
+        display: flex; 
+      }
+
+      .hamburger {
+        display: block; 
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">MySite</div>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="menu">
+      <a href="#" class="menu-item">Home</a>
+      <a href="#" class="menu-item">About</a>
+      <a href="#" class="menu-item">Services</a>
+      <a href="#" class="menu-item">Contact</a>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.querySelector('.menu');
+      menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>
