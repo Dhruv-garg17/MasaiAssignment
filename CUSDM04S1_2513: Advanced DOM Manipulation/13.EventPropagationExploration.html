@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Propagation</title>
+    <style>
+        .outer {
+            width: 300px;
+            height: 300px;
+            background-color: lightcoral;
+            padding: 20px;
+        }
+        .middle {
+            width: 200px;
+            height: 200px;
+            background-color: lightblue;
+            padding: 20px;
+        }
+        .inner {
+            width: 100px;
+            height: 100px;
+            background-color: lightgreen;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer" id="outer">
+        Outer Div
+        <div class="middle" id="middle">
+            Middle Div
+            <div class="inner" id="inner">
+                Inner Div
+                <button id="innerButton">Inner Button</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+    const outerDiv = document.getElementById('outer');
+const middleDiv = document.getElementById('middle');
+const innerDiv = document.getElementById('inner');
+const innerButton = document.getElementById('innerButton');
+
+function alertDiv(name) {
+    alert(`${name} clicked`);
+}
+
+outerDiv.addEventListener('click', () => alertDiv('Outer Div'), true);
+middleDiv.addEventListener('click', () => alertDiv('Middle Div'), true);
+innerDiv.addEventListener('click', () => alertDiv('Inner Div'), true);
+
+outerDiv.addEventListener('click', () => alertDiv('Outer Div (Bubbling)'), false);
+middleDiv.addEventListener('click', () => alertDiv('Middle Div (Bubbling)'), false);
+innerDiv.addEventListener('click', () => alertDiv('Inner Div (Bubbling)'), false);
+
+innerButton.addEventListener('click', (event) => {
+    alertDiv('Inner Button');
+    event.stopPropagation();
+});
+/*
+Event propagation in JavaScript has two phases: capturing (or trickling) and bubbling. 
+In the capturing phase, the event moves from the root of the document (top-most ancestor) down to the target element. 
+In the bubbling phase, the event moves from the target element back up to the root. 
+
+In this script, event listeners are added to the three nested div elements (outer, middle, inner) in both phases. 
+Using `true` as the third parameter in addEventListener enables event capturing, meaning the event fires during the downward traversal.
+By default (`false` or omitted), the event fires during bubbling, meaning it propagates upward.
+
+When the "Inner Button" is clicked, `event.stopPropagation()` prevents the event from propagating further, 
+so it does not trigger the event listeners attached to its parent elements.
+*/
+</script>
