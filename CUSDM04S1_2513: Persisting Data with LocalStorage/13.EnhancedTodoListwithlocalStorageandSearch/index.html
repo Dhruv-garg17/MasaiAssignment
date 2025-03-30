@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Todo List</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .container { width: 300px; margin: 50px auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        button { background: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background: #218838; }
+        ul { list-style: none; padding: 0; }
+        li { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .completed { text-decoration: line-through; color: gray; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enhanced Todo List</h2>
+        <input type="text" id="taskInput" placeholder="Enter a task">
+        <button id="addTaskBtn">Add Task</button>
+        <input type="text" id="searchTask" placeholder="Search tasks...">
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById("taskInput");
+        const addTaskBtn = document.getElementById("addTaskBtn");
+        const searchTask = document.getElementById("searchTask");
+        const taskList = document.getElementById("taskList");
+
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+        function renderTasks(filteredTasks = tasks) {
+            taskList.innerHTML = "";
+            filteredTasks.forEach(task => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <span class="${task.completed ? 'completed' : ''}">${task.text}</span>
+                    <div>
+                        <button onclick="toggleComplete(${task.id})">✔</button>
+                        <button onclick="deleteTask(${task.id})">❌</button>
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+
+        addTaskBtn.addEventListener("click", () => {
+            const text = taskInput.value.trim();
+            if (text) {
+                const newTask = { id: Date.now(), text, completed: false };
+                tasks.push(newTask);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                taskInput.value = "";
+                renderTasks();
+            }
+        });
+
+        function toggleComplete(id) {
+            tasks = tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        searchTask.addEventListener("input", () => {
+            const searchText = searchTask.value.toLowerCase();
+            const filteredTasks = tasks.filter(task => task.text.toLowerCase().includes(searchText));
+            renderTasks(filteredTasks);
+        });
+
+        renderTasks();
+    </script>
+</body>
+</html>
