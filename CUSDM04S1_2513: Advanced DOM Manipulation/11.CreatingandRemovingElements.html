@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragraph Manager</title>
+</head>
+<body>
+    <button id="addBtn">Add Paragraph</button>
+    <button id="removeBtn">Remove Last Paragraph</button>
+    <div id="paraContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+<script>
+    // Select the container div where paragraphs will be added
+const paraContainer = document.getElementById('paraContainer');
+
+// Select the buttons
+const addBtn = document.getElementById('addBtn');
+const removeBtn = document.getElementById('removeBtn');
+
+// Function to add a new paragraph
+addBtn.addEventListener('click', () => {
+    const newPara = document.createElement('p'); // Create a new <p> element
+    newPara.textContent = "This is a new paragraph."; // Set text content
+    paraContainer.appendChild(newPara); // Append to the container
+});
+
+// Function to remove the last added paragraph
+removeBtn.addEventListener('click', () => {
+    if (paraContainer.lastChild) {
+        paraContainer.removeChild(paraContainer.lastChild); // Remove last paragraph
+    }
+});
+
+</script>
