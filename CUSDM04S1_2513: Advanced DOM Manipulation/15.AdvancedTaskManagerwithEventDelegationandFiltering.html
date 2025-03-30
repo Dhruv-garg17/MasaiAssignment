@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Advanced Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .task-container {
+      margin-top: 10px;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #ddd;
+      padding: 5px;
+      margin: 5px 0;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .filters, .counters, .sorting {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Task Manager</h2>
+  
+  <!-- Input Field for Task Addition -->
+  <input id="taskInput" type="text" placeholder="Enter task">
+  <button id="addTask">Add Task</button>
+  
+  <!-- Task List -->
+  <div class="task-container">
+    <ul id="taskList"></ul>
+  </div>
+
+  <!-- Filtering Buttons -->
+  <div class="filters">
+    <button id="showAll">All Tasks</button>
+    <button id="showCompleted">Completed Tasks</button>
+    <button id="showIncomplete">Incomplete Tasks</button>
+  </div>
+
+  <!-- Sorting Button -->
+  <div class="sorting">
+    <button id="sortTasks">Sort Alphabetically</button>
+  </div>
+
+  <!-- Task Counters -->
+  <div class="counters">
+    <p>Total Tasks: <span id="totalCount">0</span></p>
+    <p>Completed Tasks: <span id="completedCount">0</span></p>
+    <p>Incomplete Tasks: <span id="incompleteCount">0</span></p>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById('taskInput');
+    const addTaskButton = document.getElementById('addTask');
+    const taskList = document.getElementById('taskList');
+    const showAllButton = document.getElementById('showAll');
+    const showCompletedButton = document.getElementById('showCompleted');
+    const showIncompleteButton = document.getElementById('showIncomplete');
+    const sortTasksButton = document.getElementById('sortTasks');
+    const totalCount = document.getElementById('totalCount');
+    const completedCount = document.getElementById('completedCount');
+    const incompleteCount = document.getElementById('incompleteCount');
+
+    let tasks = []; // Store tasks as objects: {text, completed}
+
+    // Function to update the task list UI
+    function updateTaskList(filteredTasks = tasks) {
+      taskList.innerHTML = ''; // Clear existing tasks
+
+      filteredTasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.classList.add('task');
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.dataset.index = index;
+
+        const taskText = document.createElement('span');
+        taskText.textContent = task.text;
+        if (task.completed) taskText.classList.add('completed');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.dataset.index = index;
+
+        li.appendChild(checkbox);
+        li.appendChild(taskText);
+        li.appendChild(deleteButton);
+        taskList.appendChild(li);
+      });
+
+      updateCounters();
+    }
+
+    // Function to update task counters
+    function updateCounters() {
+      totalCount.textContent = tasks.length;
+      completedCount.textContent = tasks.filter(task => task.completed).length;
+      incompleteCount.textContent = tasks.filter(task => !task.completed).length;
+    }
+
+    // Event Listener for Adding Tasks
+    addTaskButton.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (!taskText) {
+        alert("Task cannot be empty!");
+        return;
+      }
+      
+      tasks.push({ text: taskText, completed: false });
+      taskInput.value = '';
+      updateTaskList();
+    });
+
+    // Event Delegation for Deleting and Completing Tasks
+    taskList.addEventListener('click', (event) => {
+      const index = event.target.dataset.index;
+      if (event.target.tagName === 'BUTTON') {
+        tasks.splice(index, 1); // Remove task
+      } else if (event.target.tagName === 'INPUT') {
+        tasks[index].completed = event.target.checked; // Toggle completion
+      }
+      updateTaskList();
+    });
+
+    // Event Listeners for Filtering Tasks
+    showAllButton.addEventListener('click', () => updateTaskList());
+    showCompletedButton.addEventListener('click', () => {
+      updateTaskList(tasks.filter(task => task.completed));
+    });
+    showIncompleteButton.addEventListener('click', () => {
+      updateTaskList(tasks.filter(task => !task.completed));
+    });
+
+    // Sorting Tasks Alphabetically
+    sortTasksButton.addEventListener('click', () => {
+      tasks.sort((a, b) => a.text.localeCompare(b.text));
+      updateTaskList();
+    });
+
+  </script>
+</body>
+</html>
