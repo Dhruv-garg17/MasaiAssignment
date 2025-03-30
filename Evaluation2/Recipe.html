@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Sharing App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Recipe Sharing App</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="/HTML/addrecipe.html">Add Recipe</a></li>
+                <li><a href="#view-recipes">View Recipes</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="add-recipe">
+        <h2>Add New Recipe</h2>
+        <form id="recipe-form">
+            <label for="recipe-name">Recipe Name:</label>
+            <input type="text" id="recipe-name" required>
+            
+            <label for="ingredients">Ingredients:</label>
+            <textarea id="ingredients" required></textarea>
+            
+            <label for="category">Category:</label>
+            <select id="category" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Drinks">Drinks</option>
+            </select>
+            
+            <label for="steps">Preparation Steps:</label>
+            <textarea id="steps" required></textarea>
+            
+            <button type="submit">Add Recipe</button>
+        </form>
+    </section>
+    
+    <section id="view-recipes">
+        <h2>Recipe List</h2>
+        <label for="filter">Filter by Category:</label>
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Drinks">Drinks</option>
+        </select>
+        
+        <div id="recipe-container"></div>
+    </section>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("recipe-form");
+            const recipeContainer = document.getElementById("recipe-container");
+            const filter = document.getElementById("filter");
+            
+            function getRecipes() {
+                return JSON.parse(localStorage.getItem("recipes")) || [];
+            }
+            
+            function saveRecipes(recipes) {
+                localStorage.setItem("recipes", JSON.stringify(recipes));
+            }
+            
+            function displayRecipes(filterCategory = "all") {
+                recipeContainer.innerHTML = "";
+                const recipes = getRecipes();
+                const filteredRecipes = filterCategory === "all" ? recipes : recipes.filter(recipe => recipe.category === filterCategory);
+                
+                filteredRecipes.forEach(recipe => {
+                    const recipeCard = document.createElement("div");
+                    recipeCard.classList.add("recipe-card");
+                    recipeCard.innerHTML = `
+                        <h3>${recipe.name}</h3>
+                        <p><strong>Category:</strong> ${recipe.category}</p>
+                        <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
+                        <p><strong>Steps:</strong> ${recipe.steps}</p>
+                    `;
+                    recipeContainer.appendChild(recipeCard);
+                });
+            }
+            
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                
+                const name = document.getElementById("recipe-name").value;
+                const ingredients = document.getElementById("ingredients").value;
+                const category = document.getElementById("category").value;
+                const steps = document.getElementById("steps").value;
+                
+                const newRecipe = { name, ingredients, category, steps };
+                const recipes = getRecipes();
+                recipes.push(newRecipe);
+                saveRecipes(recipes);
+                displayRecipes();
+                form.reset();
+            });
+            
+            filter.addEventListener("change", (event) => {
+                displayRecipes(event.target.value);
+            });
+            
+            displayRecipes();
+        });
+    </script>
+</body>
+</html>
