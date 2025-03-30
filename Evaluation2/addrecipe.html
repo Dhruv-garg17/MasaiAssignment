@@ -32,6 +32,60 @@
         </form>
     </section>
 </div>
-    
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("recipe-form");
+        const recipeContainer = document.getElementById("recipe-container");
+        const filter = document.getElementById("filter");
+        
+        function getRecipes() {
+            return JSON.parse(localStorage.getItem("recipes")) || [];
+        }
+        
+        function saveRecipes(recipes) {
+            localStorage.setItem("recipes", JSON.stringify(recipes));
+        }
+        
+        function displayRecipes(filterCategory = "all") {
+            recipeContainer.innerHTML = "";
+            const recipes = getRecipes();
+            const filteredRecipes = filterCategory === "all" ? recipes : recipes.filter(recipe => recipe.category === filterCategory);
+            
+            filteredRecipes.forEach(recipe => {
+                const recipeCard = document.createElement("div");
+                recipeCard.classList.add("recipe-card");
+                recipeCard.innerHTML = `
+                    <h3>${recipe.name}</h3>
+                    <p><strong>Category:</strong> ${recipe.category}</p>
+                    <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
+                    <p><strong>Steps:</strong> ${recipe.steps}</p>
+                `;
+                recipeContainer.appendChild(recipeCard);
+            });
+        }
+        
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            
+            const name = document.getElementById("recipe-name").value;
+            const ingredients = document.getElementById("ingredients").value;
+            const category = document.getElementById("category").value;
+            const steps = document.getElementById("steps").value;
+            
+            const newRecipe = { name, ingredients, category, steps };
+            const recipes = getRecipes();
+            recipes.push(newRecipe);
+            saveRecipes(recipes);
+            displayRecipes();
+            form.reset();
+        });
+        
+        filter.addEventListener("change", (event) => {
+            displayRecipes(event.target.value);
+        });
+        
+        displayRecipes();
+    });
+</script>
 </body>
 </html>
