@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #taskInput {
+      padding: 8px;
+      width: 250px;
+    }
+    #addTask {
+      padding: 8px 15px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .delete {
+      background-color: red;
+      color: white;
+      border: none;
+    }
+    .complete {
+      background-color: green;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <input type="text" id="taskInput" placeholder="Enter a task">
+  <button id="addTask">Add Task</button>
+  <ul id="taskList"></ul>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const addTaskButton = document.getElementById("addTask");
+    const taskList = document.getElementById("taskList");
+
+    addTaskButton.addEventListener("click", function () {
+      const taskText = taskInput.value.trim();
+      if (taskText === "") {
+        alert("Please enter a task!");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.textContent = taskText;
+
+      const completeButton = document.createElement("button");
+      completeButton.textContent = "Complete";
+      completeButton.classList.add("btn", "complete");
+      completeButton.addEventListener("click", function () {
+        li.classList.toggle("completed");
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.classList.add("btn", "delete");
+      deleteButton.addEventListener("click", function () {
+        taskList.removeChild(li);
+      });
+
+      li.appendChild(completeButton);
+      li.appendChild(deleteButton);
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+    });
+  </script>
+</body>
+</html>
