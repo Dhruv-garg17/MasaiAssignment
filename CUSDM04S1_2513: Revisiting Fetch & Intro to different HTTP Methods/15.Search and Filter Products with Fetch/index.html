@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search & Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #search, #categoryFilter, #sort {
+            margin: 10px;
+            padding: 8px;
+        }
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 250px;
+            text-align: center;
+        }
+        .product img {
+            width: 100px;
+            height: 100px;
+        }
+        #error {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Product Search & Filtering</h2>
+    <input type="text" id="search" placeholder="Search products..." oninput="filterProducts()">
+    <select id="categoryFilter" onchange="filterProducts()">
+        <option value="">All Categories</option>
+    </select>
+    <select id="sort" onchange="filterProducts()">
+        <option value="">Sort by Price</option>
+        <option value="asc">Low to High</option>
+        <option value="desc">High to Low</option>
+    </select>
+
+    <h3 id="productCount"></h3>
+    <div id="error">Failed to fetch products. Please try again later.</div>
+    <div class="product-container" id="products"></div>
+
+    <script>
+        let allProducts = [];
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch("https://fakestoreapi.com/products");
+                if (!response.ok) throw new Error("Failed to fetch products");
+                allProducts = await response.json();
+                displayProducts(allProducts);
+                fetchCategories();
+            } catch (error) {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+
+        async function fetchCategories() {
+            try {
+                const response = await fetch("https://fakestoreapi.com/products/categories");
+                if (!response.ok) throw new Error("Failed to fetch categories");
+                const categories = await response.json();
+                const categoryFilter = document.getElementById("categoryFilter");
+                categories.forEach(category => {
+                    const option = document.createElement("option");
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        }
+
+        function displayProducts(products) {
+            const productContainer = document.getElementById("products");
+            const productCount = document.getElementById("productCount");
+            productContainer.innerHTML = "";
+            productCount.textContent = `Showing ${products.length} products`;
+
+            products.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.classList.add("product");
+                productDiv.innerHTML = `
+                    <img src="${product.image}" alt="${product.title}">
+                    <h4>${product.title}</h4>
+                    <p>Price: $${product.price}</p>
+                `;
+                productContainer.appendChild(productDiv);
+            });
+        }
+
+        function filterProducts() {
+            let filteredProducts = [...allProducts];
+            const searchQuery = document.getElementById("search").value.toLowerCase();
+            const selectedCategory = document.getElementById("categoryFilter").value;
+            const sortOption = document.getElementById("sort").value;
+
+            if (searchQuery) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.title.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            if (selectedCategory) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.category === selectedCategory
+                );
+            }
+
+            if (sortOption === "asc") {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (sortOption === "desc") {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+
+            displayProducts(filteredProducts);
+        }
+
+        window.onload = fetchProducts;
+    </script>
+
+</body>
+</html>
