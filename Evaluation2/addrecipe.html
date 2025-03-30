@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe</title>
+</head>
+<body>
+    <h2>Add New Recipe</h2>
+    <section id="add-recipe" style="display: flexbox; ">
+        
+        <form id="recipe-form" style="margin: 10px;">
+            <label for="recipe-name">Recipe Name:</label>
+            <input type="text" id="recipe-name" required>
+            <br>
+            <label for="ingredients">Ingredients:</label>
+            <textarea id="ingredients" required></textarea>
+            <br>
+            <label for="category">Category:</label>
+            <select id="category" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Drinks">Drinks</option>
+            </select>
+            <br>
+            <label for="steps">Preparation Steps:</label>
+            <textarea id="steps" required></textarea>
+            <br>
+            <button type="submit">Add Recipe</button>
+        </form>
+    </section>
+</div>
+    
+</body>
+</html>
