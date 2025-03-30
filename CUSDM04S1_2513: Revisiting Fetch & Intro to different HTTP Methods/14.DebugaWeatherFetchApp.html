@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input {
+            padding: 10px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+        #weather {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #error {
+            color: red;
+            margin-top: 10px;
+            display: none; /* Initially hide error message */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Weather App</h2>
+    <form id="weatherForm">
+        <input type="text" id="city" placeholder="Enter city name">
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="weather"></div>
+    <div id="error">Invalid city name. Please try again.</div>
+
+    <script>
+        const weatherForm = document.getElementById('weatherForm');
+        const cityInput = document.getElementById('city');
+        const weatherDisplay = document.getElementById('weather');
+        const errorMessage = document.getElementById('error');
+        const API_KEY = "YOUR_API_KEY"; // Replace with your OpenWeather API Key
+
+        weatherForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const city = cityInput.value.trim(); // Trim spaces to avoid empty input
+
+            // Added validation: Check if input is empty
+            if (city === "") {
+                errorMessage.textContent = "Please enter a city name.";
+                errorMessage.style.display = "block";
+                weatherDisplay.textContent = ""; // Clear previous weather data
+                return;
+            }
+            fetchWeather(city);
+        });
+
+        async function fetchWeather(city) {
+            try {
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`; // Added units=metric for Celsius
+                const response = await fetch(url);
+
+                // Added error handling: Check if response is not ok (e.g., city not found)
+                if (!response.ok) {
+                    throw new Error("City not found"); // Throw error if response is not successful
+                }
+
+                const data = await response.json();
+                displayWeather(data);
+            } catch (error) {
+                // Display user-friendly error message
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = "block";
+                weatherDisplay.textContent = ""; // Clear previous weather data
+            }
+        }
+
+        function displayWeather(data) {
+            errorMessage.style.display = "none"; // Hide error message on success
+            const { name, main, weather } = data;
+
+            // Improved display format: Show city, temperature, and weather condition
+            weatherDisplay.innerHTML = `
+                <h3>Weather in ${name}</h3>
+                <p>Temperature: ${main.temp}°C</p>  <!-- Temperature in Celsius -->
+                <p>Condition: ${weather[0].description}</p> <!-- Weather condition -->
+            `;
+        }
+    </script>
+
+</body>
+</html>
