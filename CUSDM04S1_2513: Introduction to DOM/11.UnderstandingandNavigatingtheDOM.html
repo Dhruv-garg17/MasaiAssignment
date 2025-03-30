@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation</title>
+    <style>
+        .container {
+            padding: 20px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="main-heading">Hello, program!</h1>
+    
+    <p>i am dhruv garg</p>
+    <p>i want to be software engineer</p>
+    <p>i like reading books</p>
+
+    <div class="container">
+        <p>comments here to give any suggesion</p>
+    </div>
+
+</body>
+</html>
+<script>
+const heading = document.getElementById('main-heading');
+heading.textContent = 'Welcome to the DOM World!';
+
+const paragraphs = document.getElementsByTagName('p');
+for (let i = 0; i < paragraphs.length; i++) {
+    paragraphs[i].style.color = 'blue';
+}
+
+const containerDiv = document.querySelector('.container');
+containerDiv.style.backgroundColor = 'yellow';
+</script>
