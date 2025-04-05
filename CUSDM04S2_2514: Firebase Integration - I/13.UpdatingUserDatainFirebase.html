@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase User Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f4f8;
+      text-align: center;
+    }
+    form, .edit-form {
+      background-color: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+    }
+    th {
+      background-color: #eaeaea;
+    }
+    #message {
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+    }
+    .edit-form {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Firebase User Manager</h2>
+
+  <form id="userForm">
+    <h3>Add New User</h3>
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <button type="submit">Add User</button>
+  </form>
+
+  <div class="edit-form" id="editForm">
+    <h3>Edit User</h3>
+    <input type="text" id="editName" />
+    <input type="email" id="editEmail" />
+    <button id="saveEditBtn">Save Changes</button>
+    <button onclick="cancelEdit()" style="margin-top:10px;background:#ccc;">Cancel</button>
+  </div>
+
+  <div id="message"></div>
+
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const BASE_URL = "https://masai-3e051-default-rtdb.asia-southeast1.firebasedatabase.app/users";
+    const userForm = document.getElementById("userForm");
+    const editForm = document.getElementById("editForm");
+    const userTableBody = document.querySelector("#userTable tbody");
+    const messageDiv = document.getElementById("message");
+
+    // For editing
+    let currentEditId = null;
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch(`${BASE_URL}.json`);
+        const data = await res.json();
+        renderTable(data);
+      } catch (err) {
+        messageDiv.textContent = "Failed to fetch users.";
+      }
+    }
+
+    function renderTable(data) {
+      userTableBody.innerHTML = "";
+      if (!data) {
+        const row = document.createElement("tr");
+        row.innerHTML = "<td colspan='3'>No users found</td>";
+        userTableBody.appendChild(row);
+        return;
+      }
+
+      Object.keys(data).forEach(id => {
+        const user = data[id];
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>
+            <button onclick="editUser('${id}', '${user.name}', '${user.email}')">Edit</button>
+          </td>
+        `;
+
+        userTableBody.appendChild(row);
+      });
+    }
+
+    // Add user
+    userForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (!name || !email) {
+        messageDiv.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      const userData = { name, email };
+
+      try {
+        const res = await fetch(`${BASE_URL}.json`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userData)
+        });
+
+        if (!res.ok) throw new Error("Failed to add user.");
+
+        userForm.reset();
+        messageDiv.style.color = "green";
+        messageDiv.textContent = "User added successfully!";
+        fetchUsers();
+      } catch (err) {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = err.message;
+      }
+    });
+
+    // Edit User Function
+    function editUser(id, name, email) {
+      currentEditId = id;
+      document.getElementById("editName").value = name;
+      document.getElementById("editEmail").value = email;
+      editForm.style.display = "block";
+      messageDiv.textContent = "";
+    }
+
+    // Cancel Edit
+    function cancelEdit() {
+      editForm.style.display = "none";
+      currentEditId = null;
+    }
+
+    // Save Edited User
+    document.getElementById("saveEditBtn").addEventListener("click", async () => {
+      const name = document.getElementById("editName").value.trim();
+      const email = document.getElementById("editEmail").value.trim();
+
+      if (!name || !email) {
+        messageDiv.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${BASE_URL}/${currentEditId}.json`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email })
+        });
+
+        if (!res.ok) throw new Error("Failed to update user.");
+
+        messageDiv.style.color = "green";
+        messageDiv.textContent = "User updated successfully!";
+        editForm.style.display = "none";
+        currentEditId = null;
+        fetchUsers();
+      } catch (err) {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = err.message;
+      }
+    });
+
+    // Initial Load
+    fetchUsers();
+  </script>
+
+</body>
+</html>
