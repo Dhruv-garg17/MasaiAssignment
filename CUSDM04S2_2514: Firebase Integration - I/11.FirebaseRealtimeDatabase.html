@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase User List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+    }
+    table {
+      border-collapse: collapse;
+      width: 70%;
+      margin: 20px auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px 15px;
+      text-align: left;
+    }
+    th {
+      background-color: #eaeaea;
+    }
+    #message {
+      text-align: center;
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>User List from Firebase</h2>
+  <div id="message"></div>
+
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const firebaseURL = 'https://masai-3e051-default-rtdb.asia-southeast1.firebasedatabase.app/users.json';
+
+    async function fetchUsers() {
+      try {
+        const response = await fetch(firebaseURL);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data from Firebase");
+        }
+
+        const data = await response.json();
+
+        if (!data) {
+          document.getElementById("message").textContent = "No users found in the database.";
+          return;
+        }
+
+        const tbody = document.querySelector("#userTable tbody");
+        tbody.innerHTML = ""; // Clear previous rows
+
+        Object.values(data).forEach(user => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (error) {
+        document.getElementById("message").textContent = "Error: " + error.message;
+      }
+    }
+
+    fetchUsers();
+  </script>
+
+</body>
+</html>
