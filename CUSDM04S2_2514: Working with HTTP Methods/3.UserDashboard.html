@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f4f4f4;
+    }
+    h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #e9ecef;
+      margin: 0.5rem 0;
+      padding: 0.7rem;
+      border-radius: 4px;
+    }
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+    .success { background-color: #d4edda; color: #155724; }
+    .error { background-color: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>User Dashboard</h2>
+
+    <h3>Registered Users</h3>
+    <ul id="userList"></ul>
+
+    <h3>Add New User</h3>
+    <input type="text" id="name" placeholder="Full Name" />
+    <input type="email" id="email" placeholder="Email Address" />
+    <button onclick="addUser()">Add User</button>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    const apiUrl = "https://67f1819dc733555e24ad665e.mockapi.io/users";
+    const userList = document.getElementById("userList");
+    const msg = document.getElementById("message");
+
+    // Fetch and display users
+    async function fetchUsers() {
+      try {
+        const res = await fetch(apiUrl);
+        const users = await res.json();
+        userList.innerHTML = "";
+        users.forEach(user => {
+          const li = document.createElement("li");
+          li.textContent = `${user.name} - ${user.email}`;
+          userList.appendChild(li);
+        });
+      } catch (err) {
+        showMessage("Failed to fetch users.", "error");
+        console.error(err);
+      }
+    }
+
+    // Add new user
+    async function addUser() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      if (!name || !email) {
+        showMessage("Please fill in all fields.", "error");
+        return;
+      }
+
+      try {
+        // Check for duplicate
+        const res = await fetch(apiUrl);
+        const users = await res.json();
+        const isDuplicate = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+        if (isDuplicate) {
+          showMessage("Email already exists!", "error");
+          return;
+        }
+
+        const newUser = { name, email };
+        const postRes = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUser)
+        });
+
+        if (!postRes.ok) throw new Error("Failed to add user");
+
+        showMessage("User added successfully!", "success");
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        fetchUsers();
+      } catch (err) {
+        showMessage("Error adding user.", "error");
+        console.error(err);
+      }
+    }
+
+    function showMessage(text, type) {
+      msg.textContent = text;
+      msg.className = `message ${type}`;
+      setTimeout(() => {
+        msg.textContent = "";
+        msg.className = "message";
+      }, 3000);
+    }
+
+    fetchUsers(); // Load users on page load
+  </script>
+</body>
+</html>
