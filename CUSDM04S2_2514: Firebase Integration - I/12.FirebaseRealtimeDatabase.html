@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase User Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    form {
+      background-color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #d32f2f;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>User Registration</h2>
+  <form id="userForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required />
+
+    <button type="submit">Register</button>
+  </form>
+
+  <div id="message"></div>
+
+  <script>
+    const form = document.getElementById("userForm");
+    const messageDiv = document.getElementById("message");
+
+    const firebaseURL = "https://masai-3e051-default-rtdb.asia-southeast1.firebasedatabase.app/users.json";
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (!name || !email) {
+        messageDiv.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      const userData = { name, email };
+
+      try {
+        const response = await fetch(firebaseURL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add user");
+        }
+
+        form.reset();
+        messageDiv.style.color = "green";
+        messageDiv.textContent = "User added successfully!";
+      } catch (error) {
+        messageDiv.style.color = "red";
+        messageDiv.textContent = "Error: " + error.message;
+      }
+    });
+  </script>
+
+</body>
+</html>
