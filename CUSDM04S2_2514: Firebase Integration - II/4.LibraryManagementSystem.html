@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+    form, .filters, table {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    input, select {
+      padding: 8px;
+      margin: 5px;
+      width: 150px;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      cursor: pointer;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background: #eee;
+    }
+    .pagination {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📚 Library Management System</h2>
+
+  <form id="bookForm">
+    <h3>Add/Edit Book</h3>
+    <input type="hidden" id="bookId">
+    <input type="text" id="title" placeholder="Title" required>
+    <input type="text" id="author" placeholder="Author" required>
+    <input type="text" id="genre" placeholder="Genre" required>
+    <input type="number" id="year" placeholder="Year" required>
+    <select id="available">
+      <option value="true">Available</option>
+      <option value="false">Not Available</option>
+    </select>
+    <button type="submit">Save</button>
+  </form>
+
+  <div class="filters">
+    <h3>Filters & Sorting</h3>
+    <select id="filterGenre">
+      <option value="">All Genres</option>
+      <option value="Science Fiction">Science Fiction</option>
+      <option value="Dystopian">Dystopian</option>
+    </select>
+
+    <select id="filterAvailable">
+      <option value="">All Availability</option>
+      <option value="true">Available</option>
+      <option value="false">Not Available</option>
+    </select>
+
+    <select id="sortBy">
+      <option value="">Sort By</option>
+      <option value="title">Title</option>
+      <option value="author">Author</option>
+      <option value="publishedYear">Year</option>
+    </select>
+
+    <select id="itemsPerPage">
+      <option value="2">2 Per Page</option>
+      <option value="5" selected>5 Per Page</option>
+      <option value="10">10 Per Page</option>
+    </select>
+  </div>
+
+  <table id="bookTable">
+    <thead>
+      <tr>
+        <th>Title</th><th>Author</th><th>Genre</th><th>Year</th><th>Available</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="pagination">
+    <button onclick="prevPage()">Previous</button>
+    <span id="pageInfo"></span>
+    <button onclick="nextPage()">Next</button>
+  </div>
+
+<script>
+  const BASE_URL = "https://masai-3e051-default-rtdb.asia-southeast1.firebasedatabase.app/books";
+  const tableBody = document.querySelector("#bookTable tbody");
+  const form = document.getElementById("bookForm");
+  const pageInfo = document.getElementById("pageInfo");
+
+  let books = [];
+  let currentPage = localStorage.getItem("page") || 1;
+  let perPage = localStorage.getItem("perPage") || 5;
+  let filters = JSON.parse(localStorage.getItem("filters")) || {};
+  let sortBy = localStorage.getItem("sortBy") || "";
+
+  // Fetch Books
+  async function fetchBooks() {
+    const res = await fetch(`${BASE_URL}.json`);
+    const data = await res.json();
+    books = Object.entries(data || {}).map(([id, val]) => ({ id, ...val }));
+    applyFilters();
+  }
+
+  function applyFilters() {
+    let filtered = [...books];
+
+    if (filters.genre) filtered = filtered.filter(b => b.genre === filters.genre);
+    if (filters.available !== undefined && filters.available !== "") {
+      filtered = filtered.filter(b => String(b.available) === filters.available);
+    }
+
+    if (sortBy) {
+      filtered.sort((a, b) => a[sortBy].toString().localeCompare(b[sortBy].toString()));
+    }
+
+    renderBooks(filtered);
+  }
+
+  function renderBooks(data) {
+    const start = (currentPage - 1) * perPage;
+    const end = start + +perPage;
+    const paginated = data.slice(start, end);
+    tableBody.innerHTML = "";
+
+    for (const book of paginated) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.genre}</td>
+        <td>${book.publishedYear}</td>
+        <td>${book.available ? "Yes" : "No"}</td>
+        <td>
+          <button onclick='editBook("${book.id}")'>Edit</button>
+          <button onclick='deleteBook("${book.id}")'>Delete</button>
+        </td>`;
+      tableBody.appendChild(tr);
+    }
+
+    pageInfo.textContent = `Page ${currentPage} of ${Math.ceil(data.length / perPage)}`;
+    localStorage.setItem("page", currentPage);
+  }
+
+  // Submit Form
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const book = {
+      title: form.title.value,
+      author: form.author.value,
+      genre: form.genre.value,
+      publishedYear: +form.year.value,
+      available: form.available.value === "true"
+    };
+
+    const id = form.bookId.value;
+    const method = id ? "PATCH" : "POST";
+    const url = id ? `${BASE_URL}/${id}.json` : `${BASE_URL}.json`;
+
+    await fetch(url, {
+      method,
+      body: JSON.stringify(book),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    form.reset();
+    form.bookId.value = "";
+    fetchBooks();
+  };
+
+  // Edit Book
+  function editBook(id) {
+    const book = books.find(b => b.id === id);
+    form.bookId.value = book.id;
+    form.title.value = book.title;
+    form.author.value = book.author;
+    form.genre.value = book.genre;
+    form.year.value = book.publishedYear;
+    form.available.value = book.available;
+    window.scrollTo(0, 0);
+  }
+
+  // Delete Book
+  async function deleteBook(id) {
+    if (!confirm("Are you sure?")) return;
+    await fetch(`${BASE_URL}/${id}.json`, { method: "DELETE" });
+    fetchBooks();
+  }
+
+  // Filters
+  document.getElementById("filterGenre").onchange = (e) => {
+    filters.genre = e.target.value;
+    localStorage.setItem("filters", JSON.stringify(filters));
+    fetchBooks();
+  };
+
+  document.getElementById("filterAvailable").onchange = (e) => {
+    filters.available = e.target.value;
+    localStorage.setItem("filters", JSON.stringify(filters));
+    fetchBooks();
+  };
+
+  document.getElementById("sortBy").onchange = (e) => {
+    sortBy = e.target.value;
+    localStorage.setItem("sortBy", sortBy);
+    fetchBooks();
+  };
+
+  document.getElementById("itemsPerPage").onchange = (e) => {
+    perPage = +e.target.value;
+    localStorage.setItem("perPage", perPage);
+    fetchBooks();
+  };
+
+  // Pagination
+  function nextPage() {
+    currentPage++;
+    fetchBooks();
+  }
+  function prevPage() {
+    if (currentPage > 1) currentPage--;
+    fetchBooks();
+  }
+
+  // Load filters/sorting on start
+  window.onload = () => {
+    document.getElementById("filterGenre").value = filters.genre || "";
+    document.getElementById("filterAvailable").value = filters.available || "";
+    document.getElementById("sortBy").value = sortBy || "";
+    document.getElementById("itemsPerPage").value = perPage;
+    fetchBooks();
+  };
+</script>
+</body>
+</html>
