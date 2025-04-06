@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Pagination</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    #user-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .user-card {
+      background-color: #f9f9f9;
+      padding: 15px;
+      width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .user-card h3 {
+      margin: 0 0 5px;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .pagination button {
+      padding: 6px 12px;
+      border: 1px solid #aaa;
+      background-color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .pagination button.active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Users (Paginated)</h1>
+  <div id="user-container"></div>
+  <div class="pagination" id="pagination-controls"></div>
+  <div class="error" id="error-message"></div>
+
+  <script>
+    const BASE_URL = "https://jsonplaceholder.typicode.com/users";
+    const LIMIT = 6;
+    const TOTAL_USERS = 10; // JSONPlaceholder only has 10 users
+    const TOTAL_PAGES = Math.ceil(TOTAL_USERS / LIMIT);
+
+    const userContainer = document.getElementById("user-container");
+    const paginationControls = document.getElementById("pagination-controls");
+    const errorMessage = document.getElementById("error-message");
+
+    // Fetch and display users for a specific page
+    async function fetchUsers(page) {
+      try {
+        errorMessage.textContent = "";
+        userContainer.innerHTML = "Loading...";
+        
+        const response = await fetch(`${BASE_URL}?_page=${page}&_limit=${LIMIT}`);
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch users");
+        }
+
+        const users = await response.json();
+        renderUsers(users);
+        highlightActiveButton(page);
+
+      } catch (error) {
+        userContainer.innerHTML = "";
+        errorMessage.textContent = "Something went wrong. Please try again.";
+        console.error(error);
+      }
+    }
+
+    // Display users on DOM
+    function renderUsers(users) {
+      userContainer.innerHTML = "";
+
+      users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "user-card";
+        div.innerHTML = `
+          <h3>${user.name}</h3>
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Phone:</strong> ${user.phone}</p>
+          <p><strong>Website:</strong> ${user.website}</p>
+        `;
+        userContainer.appendChild(div);
+      });
+    }
+
+    // Setup pagination buttons
+    function setupPagination() {
+      for (let i = 1; i <= TOTAL_PAGES; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.addEventListener("click", () => fetchUsers(i));
+        paginationControls.appendChild(btn);
+      }
+    }
+
+    // Highlight current active button
+    function highlightActiveButton(activePage) {
+      const buttons = paginationControls.querySelectorAll("button");
+      buttons.forEach((btn, index) => {
+        btn.classList.toggle("active", index + 1 === activePage);
+      });
+    }
+
+    // Initial Load
+    window.addEventListener("DOMContentLoaded", () => {
+      setupPagination();
+      fetchUsers(1); // Initial fetch for page 1
+    });
+  </script>
+
+</body>
+</html>
