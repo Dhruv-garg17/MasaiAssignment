@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sort Users - JSONPlaceholder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Users List</h1>
+
+    <div class="sort-container">
+      <label for="sort">Sort by:</label>
+      <select id="sort">
+        <option value="">-- Select --</option>
+        <option value="name">Name (A-Z)</option>
+        <option value="email">Email (A-Z)</option>
+      </select>
+    </div>
+
+    <div id="user-list" class="user-list"></div>
+
+    <div id="error" class="error"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
