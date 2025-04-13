@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Notes</title>
+    <link rel="stylesheet" href="createnotes.css">
+    <script src="https://notesapp-1f204-default-rtdb.asia-southeast1.firebasedatabase.app/"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Notesapp.html">Home</a>
+            <a href="createnotes.html">Create Notes</a>
+            <a href="viewnotes.html">View Notes</a>
+            <a href="setting.html">Settings</a>
+
+        </nav>
+    </header>
+
+    <main>
+        <h1>Create Studey Note</h1>
+        <form id="notes-form">
+            <label for="tittle">Title:</label>
+            <input type="text" id="tittle" name="tittle" required>
+
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" required></textarea>
+
+            <label for="tags">Tags:</label>
+            <select name="tags" id="tags" multiple>
+                <option value="math">Math</option>
+                <option value="coding">Coding</option>
+                <option value="dsa">DSA</option>
+                <option value="blockchain">Blockchain</option>
+            </select>
+
+            <label for="priority">Priority:</label>
+            <select name="priority" id="priority">\
+
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <label for="image">Upload Image:</label>
+            <input type="file" id="image" name="image">
+
+            <button type="submit">Save Note</button>
+        </form>
+
+        <div id="success-message" class="hidden">
+            Your note has been successfully saved!
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Notes</p>
+    </footer>
+    <script src="createnotes.js"></script>
+    
+</body>
+</html>
