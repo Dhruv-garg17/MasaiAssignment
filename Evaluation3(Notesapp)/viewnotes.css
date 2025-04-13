@@ -1,1 +1,143 @@
+:root{
+    --bg-color: white;
+    --text-color: #000;
+    --nav-bg: #f2f2f2;
+}
 
+body.dark-mode{
+    --bg-color: black;
+    --text-color: blue;
+    --nav-bg: #f1f1f1;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+    background-color: var(--nav-bg);
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+nav .active {
+    text-decoration: underline;
+}
+
+.toggle-btn {
+    padding: 0.5px 1px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.filters {
+    margin-bottom: 20px;
+}
+
+.filters select, .filters input {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#notesDisplay {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.note-card {
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.note-card img {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+.note-card h2 {
+    font-size: 1.2em;
+}
+
+.note-card .tags {
+    margin: 10px 0;
+}
+
+.note-card .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ccc;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--nav-bg);
+}
+.notes-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .note-box {
+    background-color: #f9f9f9;
+    border-left: 6px solid #4caf50;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .note-box:hover {
+    transform: scale(1.02);
+  }
+  
+  .note-box h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  .note-box p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
