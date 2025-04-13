@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Study Notes</title>
+    <link rel="stylesheet" href="viewnotes.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="Notesapp.html">Home</a>
+            <a href="createnotes.html">Create Notes</a>
+            <a href="viewnotes.html" class="active">View Notes</a>
+            <a href="setting.html">Settings</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Your Study Notes</h1>
+
+       
+        <div class="filters">
+            <select id="priorityFilter">
+                <option value="">Filter by Priority</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+
+            <select id="tagsFilter">
+                <option value="">Filter by Tags</option>
+                <option value="math">Math</option>
+                <option value="coding">Coding</option>
+                <option value="dsa">DSA</option>
+                <option value="blockchain">Blockchain</option>
+            </select>
+
+            <select id="sortBy">
+                <option value="date">Sort by Date</option>
+                <option value="priority">Sort by Priority</option>
+            </select>
+
+            <input type="text" id="searchInput" placeholder="Search by Title" />
+        </div>
+
+        
+        <div id="notesDisplay" class="notes-display">
+            
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My Notes</p>
+    </footer>
+
+   
+    <script type="module" src="viewnotes.js"></script>
+</body>
+</html>
