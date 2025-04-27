@@ -7,7 +7,7 @@ function TaskList() {
 
   const fetchData = () => {
     axios
-      .get("https://masai-87b5d-default-rtdb.asia-southeast1.firebasedatabase.app")
+      .get("https://masai-87b5d-default-rtdb.asia-southeast1.firebasedatabase.app/tasks")
       .then((response) => {
         const data = response.data;
         if (data) {
