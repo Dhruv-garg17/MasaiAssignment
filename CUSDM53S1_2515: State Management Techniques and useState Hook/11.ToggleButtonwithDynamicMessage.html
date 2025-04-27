@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toggle Button Message</title>
+  <!-- React and ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel CDN -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    p {
+      font-size: 18px;
+      margin-top: 20px;
+      color: darkblue;
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+function ToggleMessage() {
+  const [showMessage, setShowMessage] = React.useState(false);
+
+  const toggle = () => {
+    setShowMessage((prev) => !prev);
+  };
+
+  return (
+    <div>
+      <button onClick={toggle}>
+        {showMessage ? "Hide" : "Show"}
+      </button>
+      {showMessage && (
+        <p>Hello, welcome to React state management!</p>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<ToggleMessage />);
+
+</script>
+
+</body>
+</html>
