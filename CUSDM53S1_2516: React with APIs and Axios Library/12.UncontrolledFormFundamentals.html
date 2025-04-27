@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Uncontrolled Form Fundamentals</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function UncontrolledForm() {
+      const inputRef = React.useRef(null);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        alert("Submitted Text: " + inputRef.current.value);
+        inputRef.current.value = "";
+      };
+
+      return (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <h1>Uncontrolled Form</h1>
+          <form onSubmit={handleSubmit}>
+            <input 
+              type="text" 
+              placeholder="Enter text" 
+              ref={inputRef} 
+            />
+            <br /><br />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<UncontrolledForm />);
+  </script>
+</body>
+</html>
