@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Controlled Form Basics</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function ControlledForm() {
+      const [username, setUsername] = React.useState("");
+      const [error, setError] = React.useState("");
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (username.trim() === "") {
+          setError("Username cannot be empty");
+        } else {
+          setError("");
+          alert("Submitted Username: " + username);
+        }
+      };
+
+      return (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <h1>Controlled Form</h1>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <br /><br />
+            <button type="submit">Submit</button>
+          </form>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<ControlledForm />);
+  </script>
+</body>
+</html>
