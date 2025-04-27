@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shopping List</title>
+  <!-- React and ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel CDN -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    input {
+      margin: 5px;
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+function ShoppingList() {
+  const [items, setItems] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [quantity, setQuantity] = React.useState(1);
+
+  const handleAddItem = () => {
+    if (name.trim() === "" || quantity < 1) {
+      alert("Please enter a valid item name and quantity greater than 0.");
+      return;
+    }
+    const newItem = {
+      id: Date.now(),
+      name,
+      quantity
+    };
+    setItems([...items, newItem]);
+    setName("");
+    setQuantity(1);
+  };
+
+  const handleRemoveItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
+  const handleClearAll = () => {
+    setItems([]);
+  };
+
+  return (
+    <div>
+      <h1>Shopping List 🛒</h1>
+      <div>
+        <input 
+          type="text" 
+          placeholder="Item Name" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input 
+          type="number" 
+          placeholder="Quantity" 
+          value={quantity} 
+          min="1"
+          onChange={(e) => setQuantity(Number(e.target.value))}
+        />
+        <button onClick={handleAddItem}>Add Item</button>
+      </div>
+
+      {items.length > 0 && (
+        <>
+          <ul>
+            {items.map(item => (
+              <li key={item.id}>
+                {item.name} - {item.quantity}
+                <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+          <button onClick={handleClearAll}>Clear All</button>
+        </>
+      )}
+
+      {items.length === 0 && <p>No items added yet!</p>}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<ShoppingList />);
+
+</script>
+
+</body>
+</html>
