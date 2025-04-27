@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Email Fields</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function DynamicEmailForm() {
+      const [emails, setEmails] = React.useState([{ value: "", error: "" }]);
+
+      const addEmailField = () => {
+        setEmails([...emails, { value: "", error: "" }]);
+      };
+
+      const handleChange = (index, event) => {
+        const newEmails = [...emails];
+        newEmails[index].value = event.target.value;
+
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(event.target.value)) {
+          newEmails[index].error = "";
+        } else {
+          newEmails[index].error = "Invalid Email";
+        }
+
+        setEmails(newEmails);
+      };
+
+      return (
+        <div style={{ padding: "20px", maxWidth: "500px", margin: "auto" }}>
+          <h1>Dynamic Email Form</h1>
+          <form>
+            {emails.map((email, index) => (
+              <div key={index} style={{ marginBottom: "10px" }}>
+                <input
+                  type="text"
+                  placeholder="Enter Email"
+                  value={email.value}
+                  onChange={(e) => handleChange(index, e)}
+                />
+                <br />
+                {email.error && (
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    {email.error}
+                  </span>
+                )}
+              </div>
+            ))}
+          </form>
+          <button type="button" onClick={addEmailField}>
+            Add Email
+          </button>
+
+          <h2>Entered Emails:</h2>
+          <ul>
+            {emails.map((email, index) => (
+              <li key={index}>{email.value}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<DynamicEmailForm />);
+  </script>
+</body>
+</html>
