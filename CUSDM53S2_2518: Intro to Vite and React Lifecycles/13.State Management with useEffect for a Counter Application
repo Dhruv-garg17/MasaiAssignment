@@ -1,0 +1,37 @@
+import React, { useState, useEffect } from 'react';
+import './App.css'; 
+
+function App() {
+  const [counter, setCounter] = useState(0); // Counter state initialized to 0
+
+
+  useEffect(() => {
+    console.log("Counter value:", counter);
+  }, [counter]); // Dependency array makes useEffect run whenever the counter changes
+
+
+  const increment = () => {
+    setCounter(prevCounter => prevCounter + 1);
+  };
+
+
+  const decrement = () => {
+    setCounter(prevCounter => prevCounter - 1);
+  };
+
+
+  const reset = () => {
+    setCounter(0);
+  };
+
+  return (
+    <div className="counter-app">
+      <h1>Counter: {counter}</h1>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+
+export default App;
