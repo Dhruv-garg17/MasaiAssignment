@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Input with useRef</title>
+  <!-- React and ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel CDN for JSX support -->
+  <script src="https://unpkg.com/@babel/standalone"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useRef } = React;
+
+    function OTPInput() {
+      const inputRefs = useRef([]); 
+
+      const handleChange = (e, index) => {
+        if (e.target.value && index < 3) {
+          inputRefs.current[index + 1].focus();
+        }
+      };
+
+      const handleKeyDown = (e, index) => {
+        if (e.key === "Backspace" && index > 0 && !e.target.value) {
+          inputRefs.current[index - 1].focus();
+        }
+      };
+
+  
+      const renderInputs = () => {
+        return Array(4).fill("").map((_, index) => (
+          <input
+            key={index}
+            ref={(el) => (inputRefs.current[index] = el)} 
+            type="text"
+            maxLength="1" 
+            onChange={(e) => handleChange(e, index)} 
+            onKeyDown={(e) => handleKeyDown(e, index)} 
+            style={{ width: "40px", textAlign: "center", margin: "5px" }} 
+          />
+        ));
+      };
+
+      return <div>{renderInputs()}</div>;
+    }
+
+    ReactDOM.render(<OTPInput />, document.getElementById('root'));
+  </script>
+</body>
+</html>
