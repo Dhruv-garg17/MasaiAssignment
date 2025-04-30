@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Click Tracker</title>
+  <!-- React and ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel CDN for JSX support -->
+  <script src="https://unpkg.com/@babel/standalone"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useRef, useEffect } = React;
+
+    function ClickTracker() {
+      const countRef = useRef(0);
+
+      useEffect(() => {
+        console.log("Component Mounted");
+        return () => {
+          console.log("Component Unmounted");
+        };
+      }, []);
+
+      const handleClick = () => {
+        countRef.current += 1;
+        console.log(`Button clicked ${countRef.current} times`);
+      };
+
+      return (
+        <div>
+          <button onClick={handleClick}>Click me!</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<ClickTracker />, document.getElementById('root'));
+  </script>
+</body>
+</html>
