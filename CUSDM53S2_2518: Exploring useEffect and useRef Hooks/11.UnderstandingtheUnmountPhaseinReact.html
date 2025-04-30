@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unmount Phase Example</title>
+    <!-- React and ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel CDN to transpile JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function ToggleComponent() {
+            useEffect(() => {
+                console.log("Component Mounted");
+
+                return () => {
+                    console.log("Component Unmounted");
+                };
+            }, []); 
+
+            return <div>Component is visible!</div>;
+        }
+
+        function App() {
+            const [isVisible, setIsVisible] = useState(true);
+
+            const toggleVisibility = () => {
+                setIsVisible(!isVisible);
+            };
+
+            return (
+                <div>
+                    <button onClick={toggleVisibility}>
+                        Toggle Component Visibility
+                    </button>
+                    {isVisible && <ToggleComponent />}
+                </div>
+            );
+        }
+
+        
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+    
+</body>
+</html>
