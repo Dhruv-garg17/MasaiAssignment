@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Video Player</title>
+  <!-- React and ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel CDN for JSX support -->
+  <script src="https://unpkg.com/@babel/standalone"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useRef } = React;
+
+    function VideoPlayer() {
+      const videoRef = useRef(null);
+
+      const playVideo = () => {
+        videoRef.current.play();
+      };
+
+      const pauseVideo = () => {
+        videoRef.current.pause();
+      };
+
+      const restartVideo = () => {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+      };
+
+      return (
+        <div>
+          <video ref={videoRef} width="600" controls>
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div>
+            <button onClick={playVideo}>Play</button>
+            <button onClick={pauseVideo}>Pause</button>
+            <button onClick={restartVideo}>Restart</button>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<VideoPlayer />, document.getElementById('root'));
+  </script>
+</body>
+</html>
