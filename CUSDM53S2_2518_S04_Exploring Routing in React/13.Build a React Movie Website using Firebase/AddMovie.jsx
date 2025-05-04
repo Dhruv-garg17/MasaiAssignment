@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMovies } from "../context/MovieContext";
+import { useMovies } from "./MovieContext";
 import { useNavigate, useParams } from "react-router-dom";
 
 function AddMovie() {
