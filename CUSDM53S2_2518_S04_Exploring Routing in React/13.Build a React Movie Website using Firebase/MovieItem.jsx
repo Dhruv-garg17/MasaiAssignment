@@ -1,4 +1,4 @@
-import { useMovies } from "../context/MovieContext";
+import { useMovies } from "./MovieContext";
 import { Link } from "react-router-dom";
 
 function MovieItem({ id, movie }) {
