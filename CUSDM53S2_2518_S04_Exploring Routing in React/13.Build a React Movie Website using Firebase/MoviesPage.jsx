@@ -1,4 +1,4 @@
-import AddMovie from "../components/AddMovie";
+import AddMovie from "./AddMovie";
 
 function AddMoviePage() {
   return (
