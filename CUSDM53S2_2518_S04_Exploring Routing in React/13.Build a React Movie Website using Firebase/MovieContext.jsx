@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { database } from "../firebase/config";
+import { database } from "./firebase.js";
 import { ref, onValue, set, remove, update, push } from "firebase/database";
 
 const MovieContext = createContext();
