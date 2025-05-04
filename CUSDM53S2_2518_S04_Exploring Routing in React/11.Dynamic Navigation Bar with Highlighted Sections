@@ -1,0 +1,78 @@
+// App.js
+import React from 'react';
+import {
+  ChakraProvider,
+  Box,
+  Flex,
+  Stack,
+  Link as ChakraLink,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+
+function Home() {
+  return <Box p={4}><h1>Welcome to Home Page</h1></Box>;
+}
+
+function About() {
+  return <Box p={4}><h1>Welcome to About Page</h1></Box>;
+}
+
+function Contact() {
+  return <Box p={4}><h1>Welcome to Contact Page</h1></Box>;
+}
+
+function Services() {
+  return <Box p={4}><h1>Welcome to Services Page</h1></Box>;
+}
+
+function Navbar() {
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const navLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/contact', label: 'Contact' },
+    { to: '/services', label: 'Services' },
+  ];
+
+  return (
+    <Box bg="gray.100" p={4}>
+      <Flex direction={isMobile ? 'column' : 'row'} align="center" justify="space-around">
+        {navLinks.map((link) => (
+          <ChakraLink
+            as={NavLink}
+            key={link.to}
+            to={link.to}
+            end
+            px={3}
+            py={2}
+            fontWeight="bold"
+            _hover={{ color: 'blue.500' }}
+            _activeLink={{ color: 'blue.600', borderBottom: '2px solid blue' }}
+          >
+            {link.label}
+          </ChakraLink>
+        ))}
+      </Flex>
+    </Box>
+  );
+}
+
+function App() {
+  return (
+    <ChakraProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/services" element={<Services />} />
+        </Routes>
+      </Router>
+    </ChakraProvider>
+  );
+}
+
+export default App;
