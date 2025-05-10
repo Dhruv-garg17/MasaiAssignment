@@ -4,7 +4,7 @@ const multiply = require("./multiplication");
 const subtract = require("./subtraction");
 const divide = require("./division");
 
-const args = process.argv.slice(2);  // Skip first two default args
+const args = process.argv.slice(2);  
 const [operation, a, b] = args;
 const numA = Number(a);
 const numB = Number(b);
